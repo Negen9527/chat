@@ -1,0 +1,134 @@
+.drop {
+   cursor: pointer;
+   display: block;
+   width: 300px;
+   /*background: #090;*/
+ }
+
+ .drop + input{
+  display: none; /* hide the checkboxes */
+ }
+
+ .drop + input + div{
+   display:none;
+ }
+
+ .drop + input:checked + div{
+   display:block;
+ }
+
+
+ .username {
+	width: 90px;
+    display: block;
+    float: left;
+ }
+
+.fromMsg {
+	/*width: 100%;*/
+	text-align: left;
+}
+
+.meMsg {
+	/*width: 100%;*/
+	text-align: right;
+}
+
+
+.titlebar {
+    color: #fff;
+    /*background-color: #007bff;*/
+    background-color: #6c757d;
+    border-color: #007bff;
+    margin-top: 5px;
+    font-size: 28px;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.btn-add-friend {
+  float: right;
+  color: #fff;
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+}
+
+.btn-add-friend:hover {
+  color: #fff;
+  background-color: #138496;
+  border-color: #117a8b;
+}
+
+.btn {
+  display: inline-block;
+  font-weight: 400;
+  color: #212529;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: .25rem;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+
+
+.el-button {
+    display: inline-block;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    background: #fff;
+    border: 1px solid #dcdfe6;
+    color: #606266;
+    -webkit-appearance: none;
+    text-align: center;
+    box-sizing: border-box;
+    outline: none;
+    margin: 0;
+    /*transition: .1s;*/
+    font-weight: 500;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    padding: 12px 20px;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+
+.el-button--warning {
+    float: right;
+    color: #fff;
+    background-color: #e6a23c;
+    border-color: #e6a23c;
+}
+
+.el-button.is-round {
+    border-radius: 20px;
+    padding: 6px 23px;
+}
+
+
+.el-button--success {
+    float: right;
+    color: #fff;
+    background-color: #67c23a;
+    border-color: #67c23a;
+}
+
+.el-button--danger {
+    float: right;
+    color: #fff;
+    background-color: #f56c6c;
+    border-color: #f56c6c;
+}

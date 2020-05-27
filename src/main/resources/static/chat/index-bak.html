@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/index.css">
+    <script type="text/javascript" src="../static/js/jquery.min.js"></script>
+</head>
+<body>
+
+我（<span id = "userName"></span>） <br>
+
+<br>
+
+<label class="drop" for="_3">新朋友( <span id="newFriendsNum"></span> )</label>
+<input id="_3" type="checkbox"> 
+<div style="width: 250px;height:250px;overflow:auto">
+	<ul id="newFriends">
+	</ul>
+</div>
+
+
+<label class="drop" for="_1">好友列表( <span id="friendsNum"></span> )</label>
+<input id="_1" type="checkbox"> 
+<div style="width: 350px;height:250px;overflow:auto">
+	<ul id="friends">
+	</ul>
+</div>
+
+
+<label class="drop" for="_2">陌生人列表( <span id="unFriendsNum"></span> )</label>
+<input id="_2" type="checkbox"> 
+<div style="width: 250px;height:250px;overflow:auto">
+	<ul id="unFriends">
+	</ul>
+</div>
+
+<hr>
+
+<div id="chat_content" hidden="true">
+	To： <span id='toUserName'></span><input type="hidden" id="rid"><br>
+<!-- 	<textarea id='msgs' style="width: 600px; height: 350px;">
+		
+	</textarea><br> -->
+	<div id="msgs" style="width: 600px; height: 350px;border: solid;overflow: auto;">
+<!-- 		<div class="fromMsg">12121</div>
+		<div class="meMsg">mememe</div> -->
+	</div><br>
+
+	<input type="text" name="" id='msg'> 
+	<button onclick="sendMsg()">发送</button>
+</div>
+
+
+</body>
+
+<!-- <script type="text/javascript" src="../static/js/login.js"></script> -->
+<script type="text/javascript">
+	var sid,rid,ws
+	var userInfo = localStorage.getItem("userInfo");
+	if ("" != userInfo && null != userInfo) {
+		//用户信息存在，建立连接
+		userInfo = JSON.parse(userInfo)
+		console.log(userInfo)
+		var userId = userInfo["id"]
+		var userName = userInfo["userName"];
+		sid = userId;
+		$("#userName").text(userName);
+
+		//WebSocket建立连接
+		ws = new WebSocket("ws://127.0.0.1:8578/imserver/" + userId)
+		ws.onopen = function(evt) {
+			// msgData = {
+			// 	toUserId:2,
+			// 	message: "你好啊，嘿嘿嘿"
+			// }
+			// msgData = JSON.stringify(msgData);
+			// ws.send(msgData)
+
+			loadFriends(userId)
+			loadUnFriends(userId)
+			loadNewFriends(userId)
+		};
+
+		ws.onmessage = function(evt) {
+			if (evt.data != "连接成功") {
+				console.log("Received Message: " + evt.data);
+				var data = JSON.parse(evt.data);
+				var message = data.message;
+				rowStr = '<div class="fromMsg">'+message+'</div>'
+				$('#msgs').append(rowStr)
+			}
+		};
+
+		<!--这里为了模拟实时接收服务器的代码 所以把close注释了 -->
+		ws.onclose = function(evt) {
+			console.log("Connection closed.");
+		};
+
+	}
+	
+
+	//加载好友列表
+	function loadFriends(userId){
+		$.ajax({
+			url: "http://127.0.0.1:8578/friend/list/" + userId,
+			dataType:"json",
+			type: "get",
+			success: function(response){
+				console.log(response)
+				data = response.data;
+				$("#friendsNum").text(data.length)
+				for(var i = 0; i < data.length; i++){
+					var id = data[i].id;
+					var username = data[i].userName;
+					var nickname = data[i].nickName;
+					rowStr = "<li><span class=''>" + username + "（"+ nickname +"）</span><br><button id='' onclick=chatWith("+id+",'"+username+"')>发送信息</button></li>"
+					$("#friends").append(rowStr)
+				}
+			},
+			error: function(response){
+				console.log(response)
+
+			}
+		});
+	}
+
+	//加载非好友列表
+	function loadUnFriends(userId){
+		$.ajax({
+			url: "http://127.0.0.1:8578/friend/list/un/" + userId,
+			dataType:"json",
+			type: "get",
+			success: function(response){
+				console.log(response)
+				data = response.data;
+				$("#unFriendsNum").text(data.length)
+				for(var i = 0; i < data.length; i++){
+					var id = data[i].id;
+					var username = data[i].userName;
+					rowStr = "<li><span class='username'>" + username + "</span><button id='addFriend' onclick=addFriend("+userId+","+id+")>添加好友</button></li>"
+					$("#unFriends").append(rowStr)
+				}
+			},
+			error: function(response){
+				console.log(response)
+			}
+		});
+	}
+
+	//加载好友请求列表
+	function loadNewFriends(userId){
+		$.ajax({
+			url: "http://127.0.0.1:8578/friend/add/list/" + userId,
+			dataType:"json",
+			type: "get",
+			success: function(response){
+				console.log(response)
+				data = response.data;
+				$("#newFriendsNum").text(data.length)
+				for(var i = 0; i < data.length; i++){
+					var id = data[i].id;
+					var username = data[i].userName;
+					rowStr = "<li><span class='username'>" + username + "</span><button id='acceptFriend' onclick=handleAddFriend("+id+",1)>同意</button><button id='refuseFriend' onclick=handleAddFriend("+id+",2)>拒绝</button></li>"
+					$("#newFriends").append(rowStr)
+				}
+			},
+			error: function(response){
+				console.log(response)
+			}
+		});
+	}
+
+
+// 添加好友请求
+function addFriend(sendUserId, receiveUserId){
+	data = {
+		"sendUserId": sendUserId ,
+		"receiveUserId": receiveUserId,
+		"message": "你好啊"
+	}
+	$.ajax({
+		url: "http://127.0.0.1:8578/friend/add",
+		contentType: "application/json", //必须这样写
+        dataType:"json",
+		type: "post",
+		data: JSON.stringify(data),
+		success: function(response){
+			alert(response.message)
+		},
+		error: function(response){
+			console.log(response)
+		}
+	})
+}
+
+
+
+function handleAddFriend(id, isReceive){
+	data = {
+		"addFriendId": id ,
+		"isReceive": isReceive
+	}
+	$.ajax({
+		url: "http://127.0.0.1:8578/friend/add/list/handle",
+		// contentType: "application/json", //必须这样写
+        dataType:"json",
+		type: "post",
+		data: data,
+		success: function(response){
+			alert(response.message)
+		},
+		error: function(response){
+			console.log(response)
+		}
+	})
+}
+
+function chatWith(toUserId, username){
+	$("#chat_content").prop("hidden", false);
+	$('#toUserName').text(username);
+	$('#rid').val(toUserId)
+	rid = toUserId;
+
+	loadChatMsgs(sid, rid)
+}
+
+
+//加载聊天记录
+function loadChatMsgs(sid, rid){
+	$.ajax({
+		url: "http://127.0.0.1:8578/message/list?sid=" + sid + "&rid=" + rid,
+		dataType:"json",
+		type: "get",
+		success: function(response){
+			console.log("loadChatMsgs")
+			console.log(response)
+			data = response.data;
+			$('#msgs').empty();
+			for (var i = data.length - 1; i > 0; i--) {
+				var content = data[i].content;
+				var receiveUserId = data[i].receiveUserId
+				var sendUserId = data[i].sendUserId
+				var rowStr;
+				if (sendUserId == sid) {
+					rowStr = '<div class="meMsg">'+content+'</div>'
+				}else{
+					rowStr = '<div class="fromMsg">'+content+'</div>'
+				}
+				$('#msgs').append(rowStr)
+			}
+
+		},
+		error: function(response){
+			console.log(response)
+		}
+	});
+}
+
+
+//发送信息
+function sendMsg(){
+	var msg = $('#msg').val();
+	if (null == msg || "" === msg) {
+		alert("发送的消息不能为空")
+		return;
+	}
+
+	var rowStr = '<div class="meMsg">'+msg+'</div>'
+	$('#msgs').append(rowStr)
+	$('#msg').val("");
+
+	msgData = {
+		toUserId:rid,
+		message: msg
+	}
+	msgData = JSON.stringify(msgData);
+	ws.send(msgData)
+}
+
+
+
+</script>
+
+</html>

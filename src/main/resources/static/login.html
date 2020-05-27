@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录页面</title>
+
+    <script type="text/javascript" src="./static/js/jquery.min.js"></script>
+	<style type="text/css" >
+			@font-face {
+				font-family: 'iconfont';
+				src: url('./static/iconfont/iconfont.eot');
+				src: url('./static/iconfont/.eot?#iefix') format('embedded-opentype'),
+					url('./static/iconfont/iconfont.woff2') format('woff2'),
+					url('./static/iconfont/iconfont.woff') format('woff'),
+					url('./static/iconfont/iconfont.ttf') format('truetype'),
+					url('./static/iconfont/iconfont.svg#iconfont') format('svg');
+			}
+
+			.iconfont {
+				font-family: "iconfont" !important;
+				font-size: 16px;
+				font-style: normal;
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+
+			}
+
+			body,
+			html {
+				height: 100%;
+				width: 100%
+			}
+
+			#loginForm input {
+				height: 100%;
+				width: 90%;
+				border: none;
+				padding-left: 5px;
+			}
+
+			#loginForm input:focus {
+				border-color: bisque;
+				box-shadow: 0px 2px 0px rgb(242, 153, 0);
+				outline: none;
+			}
+
+			#loginForm div:nth-child(2),
+			#loginForm div:nth-child(3) {
+				border: 1px solid #f2f2f2;
+				margin-bottom: 10px;
+				height: 36px;
+				width: 260px;
+				margin-left: 20px;
+			}
+
+			#loginForm,
+			#registerForm {
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				height: 300px;
+				width: 300px;
+				border: 1px solid rgb(224, 224, 224);
+				border-radius: 5px;
+				margin-left: -150px;
+				margin-top: -150px;
+
+			}
+
+			#loginForm button,#registerForm button{
+				height: 36px;
+				width:100%;
+				border: none;
+				margin-bottom: 10px;
+				background-color: rgb(26,160,94);
+				min-width: 50px;
+				border-radius: 3px;
+				font-size: 14px;
+				font-size: 16px;
+				font-family: cursive;
+			}
+			.primary{
+				background-color: rgb(50, 171, 226) !important;
+			}
+
+			#registerForm input[type="password"],
+			#registerForm input[type="text"] {
+				height: 100%;
+				width: 210px;
+				outline: none;
+				float: right;
+				padding-left: 5px;
+				border: 1px solid rgb(224, 224, 224)
+			}
+			#registerForm div {
+					height: 36px;
+					line-height: 36px;
+					margin-bottom: 10px;
+				}
+
+				#registerForm label {
+					margin-right: 20px;
+					float: right;
+				}
+
+				</style>
+</head>
+
+<body>
+
+<div id="loginForm" >
+	<div style="height:45px;line-height:45px;margin-bottom: 20px;border-bottom: 1px solid #f2f2f2; background-color: #f2f2f2;padding-left: 10px;font-size: 22px;color: #666;">
+		登录
+	</div>
+	<div><input type="text" name="username" id="loginUsername" placeholder="username"><i class="iconfont">&#xe667;</i></input></div>
+	<div><input type="password" name="password" id="loginPassword" placeholder="password"><i class="iconfont">&#xe601;</i></div>
+	<div style="height: 36px;width:260px;margin-top: 40px;margin-left: 20px;">
+		<button onclick="handleLogin()">登录</button>
+		<button class="primary"><a href="#" onclick="handleClickRegister()" style="text-decoration: none">注册</a></button<br>
+	</div>
+</div>
+</div>
+
+<div id="registerForm" style="padding: 10px;" hidden="true">
+	<div >账号：<input type="text" name="username" id="registerUsername"></div>
+	<div>密码：<input type="password" name="password" id="pwd1"></div>
+	<div >确认密码 : <input type="password" name="password" id="pwd2"></div>
+	<div style="    width: 70%;" >性别： <label><input name="sex" type="radio" value="1" />男 </label>
+		<label><input name="sex" type="radio" value="0" />女 </label> </div>
+	<div style="height: 36px;    margin-top: 20px;width:260px;margin-left: 20px;"><button  class="primary" onclick="handleRegister()">注册</button>
+		<button> <a href="#" onclick="handleClickLogin()" style="text-decoration: none;">返回登录</a></button></div>
+</div>
+</body>
+
+<script type="text/javascript" src="./static/js/login.js"></script>
+<script type="text/javascript">
+
+</script>
+
+</html>
