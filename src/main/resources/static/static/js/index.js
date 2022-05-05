@@ -1,5 +1,16 @@
-document.querySelector('.chat[data-chat=person2]').classList.add('active-chat');
-document.querySelector('.person[data-chat=person2]').classList.add('active');
+// document.querySelector('.chat[data-chat=person2]').classList.add('active-chat');
+// document.querySelector('.person[data-chat=person2]').classList.add('active');
+
+var chatElement = document.querySelector('.chat[data-chat=person2]');
+var personElement = document.querySelector('.person[data-chat=person2]');
+
+if (null != chatElement) {
+  chatElement.classList.add('active-chat');
+}
+
+if (null != personElement) {
+  chatElement.classList.add('active');
+}
 
 var friends = {
   list: document.querySelector('ul.people'),
